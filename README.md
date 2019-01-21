@@ -1,2 +1,11 @@
-# vue-demo
-vue2,vue-router,history,multi-views and archive zip file
+### Me
+
+``` bash
+npm install
+# watch:
+npm run dev
+# build:
+npm run build
+```
+
+
