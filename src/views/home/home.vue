@@ -5,7 +5,7 @@
     </div>
 </template>
 <script>
-import date from 'common/date';
+import date from '@/common/date';
 export default {
     methods: {
         goAbout() {

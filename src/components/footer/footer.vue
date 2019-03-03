@@ -3,7 +3,7 @@
         footer
     </div>
 </template>
-<style lang="">
+<style lang="less">
     .me-footer-wrapper {
         position: fixed;
         bottom: 0;

@@ -4,8 +4,7 @@
     </div>
 </template>
 <script>
-import date from 'common/date';
-date.dateFormat();
+import date from '@/common/date';
 export default {
     
 }

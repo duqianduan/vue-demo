@@ -2,67 +2,70 @@
  * @file base configuration.
  */
 
-var path = require('path');
-var utils = require('./utils');
-var webpack = require('webpack');
-var config = require('../config');
-
-function resolve(dir) {
-    return path.join(__dirname, '..', dir)
-}
+const path = require('path');
+const webpack = require('webpack');
+const config = require('../config');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
         app: './src/app.js'
     },
-    output: {
-        path: config.build.assetsRoot
-    },
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
             'vue$': 'vue/dist/vue.esm.js',
-            '@': resolve('src'),
-            'common': resolve('src/common'),
-            'components': resolve('src/components'),
-            'config': resolve('src/config')
+            '@': path.join(__dirname, '../src')
         }
     },
     module: {
         rules: [
             {
                 test: /\.vue$/,
-                loader: 'vue-loader'
+                loader: 'vue-loader',
+                options: {
+                    loaders: {
+                        css: ExtractTextPlugin.extract({
+                            fallback: 'vue-style-loader',
+                            use: config.styleLoaders()
+                        })
+                    }
+                }
+            },
+            {
+                test: /\.(css|less)$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'vue-style-loader',
+                    use: config.styleLoaders()
+                })
             },
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
-                include: [resolve('src')]
+                exclude: /node_modules/
             },
             {
-                test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+                test: /\.(png|jpe?g|gif|svg)$/,
                 loader: 'url-loader',
                 options: {
-                    limit: 10000,
-                    name: utils.assetsPath('img/[name].[hash:7].[ext]')
+                    limit: 8192,
+                    name: 'img/[name].[hash:7].[ext]'
                 }
             },
             {
-                test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+                test: /\.(woff2?|eot|ttf|otf)$/,
                 loader: 'url-loader',
                 options: {
-                    limit: 10000,
-                    name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+                    limit: 8192,
+                    name: 'fonts/[name].[hash:7].[ext]'
                 }
             }
         ]
     },
     plugins: [
-        // extract vendor from node_modules
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             minChunks: function (module, count) {
-                // any required modules inside node_modules are extracted to vendor
                 return (
                     module.resource &&
                     /\.js$/.test(module.resource) &&
@@ -72,12 +75,10 @@ module.exports = {
                 )
             }
         }),
-        // extract webpack runtime and module manifest
         new webpack.optimize.CommonsChunkPlugin({
             name: 'manifest',
             chunks: ['vendor']
         }),
-        // extract children chunk commons
         new webpack.optimize.CommonsChunkPlugin({
             name: 'app',
             children: true,

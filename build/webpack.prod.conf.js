@@ -2,76 +2,54 @@
  * @file build configuration.
  */
 
-var path = require('path');
-var utils = require('./utils');
-var webpack = require('webpack');
-var config = require('../config');
-var merge = require('webpack-merge');
-var packageJson = require('../package.json');
-var baseWebpackConfig = require('./webpack.base.conf');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+const webpack = require('webpack');
+const config = require('../config');
+const merge = require('webpack-merge');
+const packageJson = require('../package.json');
+const baseWebpackConfig = require('./webpack.base.conf');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+const ZipWebpackPlugin = require('zip-webpack-plugin');
 
 module.exports = merge(baseWebpackConfig, {
-
     output: {
+        path: config.build.assetsRoot,
         publicPath: config.build.assetsPublicPath,
-        filename: utils.assetsPath('js/[name].[chunkhash].js'),
-        chunkFilename: utils.assetsPath('views/[name].[chunkhash].js')
+        filename: 'js/[name].[chunkhash].js',
+        chunkFilename: 'views/[name].[chunkhash].js'
     },
-
-    module: {
-        rules: utils.styleLoaders({
-            sourceMap: config.build.productionSourceMap,
-            extract: true
-        })
-    },
-
+    devtool: config.build.useSourceMap ? config.build.devtool : false,
     plugins: [
         new webpack.DefinePlugin({
             'process.env': config.build.env
         }),
-        // javascript optimize
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false
             },
-            sourceMap: config.build.productionSourceMap
+            sourceMap: config.build.useSourceMap
         }),
-        // extract css into its own file
         new ExtractTextPlugin({
-            filename: utils.assetsPath('css/[name].[contenthash].css')
+            filename: 'css/[name].[contenthash].css'
         }),
-        // Compress extracted CSS. We are using this plugin so that possible
-        // duplicated CSS from different components can be deduped.
         new OptimizeCSSPlugin({
             cssProcessorOptions: {
                 safe: true
             }
         }),
-        // generate dist index.html
         new HtmlWebpackPlugin({
             title: packageJson.title,
-            filename: config.build.index,
+            filename: 'index.html',
             template: 'index.html',
             inject: true,
             minify: {
                 removeComments: true,
-                collapseWhitespace: true,
-                removeAttributeQuotes: true
-            },
-            chunksSortMode: 'dependency'
-        }),
-        // copy custom static assets
-        new CopyWebpackPlugin([
-            {
-                from: path.resolve(__dirname, '../static'),
-                to: config.build.assetsSubDirectory,
-                ignore: ['.*']
+                collapseWhitespace: true
             }
-        ])
-    ],
-    devtool: config.build.productionSourceMap ? '#source-map' : false
+        }),
+        new ZipWebpackPlugin({
+            filename: 'me.zip'
+        })
+    ]
 });
