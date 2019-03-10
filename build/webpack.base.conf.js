@@ -1,5 +1,5 @@
 /**
- * @file base configuration.
+ * @file base configuration
  */
 
 const path = require('path');
@@ -11,6 +11,7 @@ module.exports = {
     entry: {
         app: './src/app.js'
     },
+
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
@@ -18,6 +19,7 @@ module.exports = {
             '@': path.join(__dirname, '../src')
         }
     },
+
     module: {
         rules: [
             {
@@ -62,6 +64,7 @@ module.exports = {
             }
         ]
     },
+
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
@@ -75,10 +78,12 @@ module.exports = {
                 )
             }
         }),
+
         new webpack.optimize.CommonsChunkPlugin({
             name: 'manifest',
             chunks: ['vendor']
         }),
+
         new webpack.optimize.CommonsChunkPlugin({
             name: 'app',
             children: true,

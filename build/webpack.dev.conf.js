@@ -17,7 +17,9 @@ module.exports = merge(baseWebpackConfig, {
         filename: 'js/[name].js',
         chunkFilename: 'views/[name].js'
     },
+
     devtool: config.dev.useSourceMap ? config.dev.devtool : false,
+
     devServer: {
         hot: true,
         host: config.dev.host,
@@ -26,15 +28,20 @@ module.exports = merge(baseWebpackConfig, {
         historyApiFallback: true,
         quiet: true
     },
+
     plugins: [
         new webpack.DefinePlugin({
             'process.env': config.dev.env
         }),
+
         new ExtractTextPlugin({
             filename: 'css/[name].css'
         }),
+
         new webpack.HotModuleReplacementPlugin(),
+
         new FriendlyErrorsPlugin(),
+
         new HtmlWebpackPlugin({
             title: packageJson.title,
             filename: 'index.html',

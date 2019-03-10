@@ -1,5 +1,5 @@
 /**
- * @file build configuration.
+ * @file build configuration
  */
 
 const webpack = require('webpack');
@@ -19,25 +19,31 @@ module.exports = merge(baseWebpackConfig, {
         filename: 'js/[name].[chunkhash].js',
         chunkFilename: 'views/[name].[chunkhash].js'
     },
+
     devtool: config.build.useSourceMap ? config.build.devtool : false,
+
     plugins: [
         new webpack.DefinePlugin({
             'process.env': config.build.env
         }),
+
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false
             },
             sourceMap: config.build.useSourceMap
         }),
+    
         new ExtractTextPlugin({
             filename: 'css/[name].[contenthash].css'
         }),
+
         new OptimizeCSSPlugin({
             cssProcessorOptions: {
                 safe: true
             }
         }),
+
         new HtmlWebpackPlugin({
             title: packageJson.title,
             filename: 'index.html',
@@ -48,6 +54,7 @@ module.exports = merge(baseWebpackConfig, {
                 collapseWhitespace: true
             }
         }),
+
         new ZipWebpackPlugin({
             filename: 'me.zip'
         })

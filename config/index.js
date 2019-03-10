@@ -13,6 +13,7 @@ module.exports = {
         useSourceMap: false,
         devtool: '#source-map'
     },
+
     dev: {
         host: '0.0.0.0',
         env: require('./dev.env'),
@@ -23,6 +24,7 @@ module.exports = {
         useSourceMap: true,
         devtool: '#cheap-module-eval-source-map'
     },
+
     styleLoaders() {
         let isProd = process.env.NODE_ENV === this.build.env;
         let env = isProd ? 'build' : 'dev';
